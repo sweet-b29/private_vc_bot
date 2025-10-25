@@ -16,7 +16,6 @@ PANEL_DESC = (
     "• 👥 Лимит мест\n"
     "• 👢 Кик участника\n"
     "• 👑 Передать права\n"
-    "• 🗑 Удалить канал"
 )
 
 def _build_view(db: DB, voice: discord.VoiceChannel, owner: discord.Member):
@@ -126,6 +125,15 @@ async def create_private_channel(member: discord.Member) -> discord.VoiceChannel
         overwrites=overwrites,
         reason="Создание приватки"
     )
+    allowed = config.ALLOWED_PANEL_ROLE_IDS
+    for role in guild.roles:
+        if role.is_default() or role.managed:  # @everyone и интеграции пропускаем
+            continue
+        perms = role.permissions
+        if perms.manage_channels and role.id not in allowed and role != guild.me.top_role:
+            current = overwrites.get(role) or discord.PermissionOverwrite()
+            current.update(manage_channels=False)
+            overwrites[role] = current
     return voice
 
 async def move_safe(member: discord.Member, target: Optional[discord.VoiceChannel]):

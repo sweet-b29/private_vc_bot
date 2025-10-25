@@ -4,6 +4,18 @@ from typing import List, Tuple
 from ..db import DB
 from ..services.private_rooms import apply_lock_state, delete_private_channel
 from ..services.logging import send_mod_log
+from .. import config
+
+def _is_controller(member: discord.Member, owner_id: int) -> bool:
+    if member.id == owner_id:
+        return True
+    if member.guild_permissions.administrator:
+        return True
+    # роли из белого списка
+    allow_ids = config.ALLOWED_ROLE
+    if allow_ids and any(r.id in allow_ids for r in member.roles):
+        return True
+    return False
 
 class KickMemberSelect(discord.ui.Select):
     def __init__(self, options: List[discord.SelectOption]):
@@ -16,8 +28,12 @@ class KickMemberSelect(discord.ui.Select):
         room = v.db.get_room(v.voice_channel_id) if voice else None
         if not voice or not room:
             return await interaction.response.send_message("Канал не найден.", ephemeral=True)
-        if interaction.user.id != room.owner_id and not interaction.user.guild_permissions.manage_channels:
-            return await interaction.response.send_message("Только создатель может кикать.", ephemeral=True)
+
+        owner_id = room.owner_id
+
+        if not _is_controller(interaction.user, owner_id):
+            return await interaction.response.send_message("Управлять может только создатель или модератор.",
+                                                           ephemeral=True)
 
         target_id = int(self.values[0])
         target = interaction.guild.get_member(target_id)
@@ -47,8 +63,12 @@ class TransferOwnerSelect(discord.ui.Select):
         room = v.db.get_room(v.voice_channel_id) if voice else None
         if not voice or not room:
             return await interaction.response.send_message("Канал не найден.", ephemeral=True)
-        if interaction.user.id != room.owner_id and not interaction.user.guild_permissions.manage_channels:
-            return await interaction.response.send_message("Только текущий создатель может передавать права.", ephemeral=True)
+
+        owner_id = room.owner_id
+
+        if not _is_controller(interaction.user, owner_id):
+            return await interaction.response.send_message("Управлять может только создатель или модератор.",
+                                                           ephemeral=True)
 
         new_owner_id = int(self.values[0])
         if new_owner_id == room.owner_id:
@@ -94,8 +114,12 @@ class ControlView(discord.ui.View):
         voice, room = self._get_context(interaction)
         if not voice or not room:
             return await interaction.response.send_message("Канал не найден.", ephemeral=True)
-        if interaction.user.id != room.owner_id and not interaction.user.guild_permissions.manage_channels:
-            return await interaction.response.send_message("Только создатель может менять доступ.", ephemeral=True)
+
+        owner_id = room.owner_id
+
+        if not _is_controller(interaction.user, owner_id):
+            return await interaction.response.send_message("Управлять может только создатель или модератор.",
+                                                           ephemeral=True)
 
         locked = not room.is_locked
         await apply_lock_state(voice, locked, interaction.guild.get_member(room.owner_id))
@@ -111,8 +135,12 @@ class ControlView(discord.ui.View):
         voice, room = self._get_context(interaction)
         if not voice or not room:
             return await interaction.response.send_message("Канал не найден.", ephemeral=True)
-        if interaction.user.id != room.owner_id and not interaction.user.guild_permissions.manage_channels:
-            return await interaction.response.send_message("Только создатель может менять лимит.", ephemeral=True)
+
+        owner_id = room.owner_id
+
+        if not _is_controller(interaction.user, owner_id):
+            return await interaction.response.send_message("Управлять может только создатель или модератор.",
+                                                           ephemeral=True)
 
         limit_val = int(select.values[0])
         await voice.edit(user_limit=limit_val, reason="Изменение лимита")
@@ -120,13 +148,3 @@ class ControlView(discord.ui.View):
         await send_mod_log(interaction.client, title="👥 Изменён лимит",
                            description=f"{voice.name}: {limit_val} (инициатор: {interaction.user.mention})")
         await interaction.response.send_message(f"Лимит установлен: **{limit_val}**.", ephemeral=True)
-
-    @discord.ui.button(label="Удалить канал", style=discord.ButtonStyle.danger, emoji="🗑", custom_id="priv:delete")
-    async def delete(self, interaction: discord.Interaction, button: discord.ui.Button):
-        voice, room = self._get_context(interaction)
-        if not voice or not room:
-            return await interaction.response.send_message("Канал не найден.", ephemeral=True)
-        if interaction.user.id != room.owner_id and not interaction.user.guild_permissions.manage_channels:
-            return await interaction.response.send_message("Удалить может только создатель.", ephemeral=True)
-        await interaction.response.send_message("Канал будет удалён.", ephemeral=True)
-        await delete_private_channel(self.db, voice)

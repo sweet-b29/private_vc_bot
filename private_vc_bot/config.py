@@ -5,6 +5,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# Список ролей, которым разрешено управлять чужими приватками
+ALLOWED_ROLE: set[int] = {
+    int(x) for x in os.getenv("ALLOWED_ROLE", "").replace(" ", "").split(",") if x.isdigit()
+}
+
 # Core
 DISCORD_TOKEN: str | None = os.getenv("DISCORD_TOKEN")
 GUILD_ID: int = int(os.getenv("GUILD_ID", "0"))

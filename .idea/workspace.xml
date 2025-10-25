@@ -6,9 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="f0266283-27ae-45ae-b6de-52997796564a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/private_vc.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/private_vc.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/private_vc.sqlite3-shm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/private_vc.sqlite3-wal" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/private_vc_bot/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/private_vc_bot/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/private_vc_bot/services/private_rooms.py" beforeDir="false" afterPath="$PROJECT_DIR$/private_vc_bot/services/private_rooms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/private_vc_bot/ui/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/private_vc_bot/ui/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,18 +23,18 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "sweet-b29"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;sweet-b29&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/sweet-b29/private_vc_bot.git",
-    "accountId": "590af424-a345-4407-a890-ef09689411e7"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/sweet-b29/private_vc_bot.git&quot;,
+    &quot;accountId&quot;: &quot;590af424-a345-4407-a890-ef09689411e7&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
 }</component>
@@ -49,6 +49,7 @@
     "Python.bot.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
+    "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
     "last_opened_file_path": "C:/Users/sweet/PycharmProjects/private_vc_bot",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
