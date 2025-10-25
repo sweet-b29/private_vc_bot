@@ -125,7 +125,7 @@ async def create_private_channel(member: discord.Member) -> discord.VoiceChannel
         overwrites=overwrites,
         reason="Создание приватки"
     )
-    allowed = config.ALLOWED_PANEL_ROLE_IDS
+    allowed = config.ALLOWED_ROLE
     for role in guild.roles:
         if role.is_default() or role.managed:  # @everyone и интеграции пропускаем
             continue
